@@ -3,9 +3,9 @@ module.exports = (req, res, next) => {
     
     //kick out on this middleware if there is no user!
     
-    if (!req.user) {
-        return res.status(401).send({
-            error: 'You must log in!'
+    if (req.user.credits < 1 ) {
+        return res.status(403).send({
+            error: 'Not enough credits!'
         })
     }
 

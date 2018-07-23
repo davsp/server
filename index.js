@@ -5,6 +5,7 @@ const passport = require('passport')
 const bodyParser = require('body-parser')
 const keys = require('./config/keys')
 require('./models/User')
+require('./models/Survey')
 require('./services/passport')
 
 
@@ -26,6 +27,7 @@ app.use(passport.session())
 //valid javascript yo.  exported function from authRoutes will be immediately invoked with "app"
 require('./routes/authRoutes')(app)
 require('./routes/billingRoutes')(app)
+require('./routes/surveyRoutes')(app)
 
 if (process.env.NODE_ENV === 'production'){
     // express will main.js or main.css
