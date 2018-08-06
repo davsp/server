@@ -2,8 +2,9 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form'
-import SurveyField from './SurveyField'
 import { Link } from 'react-router-dom'
+import SurveyField from './SurveyField'
+import validateEmails from '../../utils/validateEmails';
 
 const FIELDS = [
     { label: 'Survey Title', name: 'title'},
@@ -36,6 +37,22 @@ class SurveyForm extends Component {
     }
 }
 
+function validate(values) {
+    const errors = {};
+
+    errors.emails = validateEmails(values.emails || '')
+
+    _.each(FIELDS, ({ name, label }) => { // for every field object in fields array, run arrow function
+        if (!values[name]) {
+            errors[name] = 'You must provide a ' + label.toUpperCase()
+        }
+    })
+
+    // if there are no errors, proceed.
+    return errors;
+}
+
 export default reduxForm({
+    validate, // validate : validate (this is es6 just to run the function validate())
     form: 'surveyForm'
 })(SurveyForm)
