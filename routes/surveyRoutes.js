@@ -19,16 +19,17 @@ module.exports = app => {
     app.post('/api/surveys/webhooks', ((req, res) => {
         const p = new Path('/api/surveys/:surveyId/:choice')
 
-        const events = _.map(req.body,  ({ email, url }) => { // email and url destructured from event object
-            const match = p.test(new URL(url).pathname)
+        const events = _chain(req.body)
+            .map(({ email, url }) => { // email and url destructured from event object
+                const match = p.test(new URL(url).pathname)
 
-            if (match) {
-                return { email, surveyId: match.surveyId, choice: match.choice }
-            }
-        }) 
-        
-        compactEvents = _.compact(events)
-        const uniqueEvents = _.uniqBy(compactEvents, 'email', 'surveyId')
+                if (match) {
+                    return { email, surveyId: match.surveyId, choice: match.choice }
+                }
+            }) 
+            .compact()
+            .uniqBy('email', 'surveyId')
+            .value()
 
         console.log(uniqueEvents)
 
