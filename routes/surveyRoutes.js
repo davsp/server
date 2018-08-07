@@ -14,7 +14,8 @@ const Survey = mongoose.model('surveys')
 module.exports = app => {
     app.get('/api/surveys', requireLogin, async (req, res) => {
         const surveys = await Survey.find({ _user: req.user.id }) // show all records for the current user id
-    
+            .select({ recipients: false }); // "recipients: false" will not be included in the result set
+
         res.send(surveys)
     })
 
